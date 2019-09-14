@@ -31,3 +31,12 @@ if(FD_ISSET(listening socket))
     create a connection socket and add it to the list
 if(FD_ISSER(connection socket list))
     receive()
+
+
+======================== end pesudo ===================================
+
+
+htons() = host to network short
+htonl() = host to network long
+ntohs() = network to host short
+nthol() = network to host long
