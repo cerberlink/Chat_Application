@@ -1,0 +1,33 @@
+Objective -> develop a simple chat application for message exchange among remote peers.
+
+1) use TCP sockets in your peer connection implementation
+2) use the select() API or multi-threads for handling multiple socket connections
+3) integrate both client-side and server side code into one program and run on each peer
+
+
+Functionality of your program:
+
+1) help
+2) myip
+3) myport
+4) connect <destination><port no>
+5) list
+6) terminate <connection id.>
+7) send<connection id.><message>
+8) exit
+
+
+======================== original pesudo ============================
+
+set up the socket
+
+while true
+
+select()
+if(FD_ISSET(STDIN))
+    each command Functionality
+if(FD_ISSET(listening socket))
+    accept the connection request
+    create a connection socket and add it to the list
+if(FD_ISSER(connection socket list))
+    receive()
