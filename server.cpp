@@ -110,4 +110,9 @@ char ip4[INET_ADDRSTRLEN]; // space to hold the IPV4 string
 struct sockaddr in sa;     // pretend this is loaded with someting
 inet_ntop(AF_INET, &(sa.sin_addr), ip4, INET_ADDRSTRLEN);
 
-cout << "The Ipv4 address is: %s\n", ip4 << endl;
+int main()
+{
+    cout << "The Ipv4 address is: %s\n", ip4;
+
+    return 0;
+}
