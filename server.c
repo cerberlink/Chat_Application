@@ -7,11 +7,14 @@
 #include <string.h>
 #include <sys/types.h>
 
+//client port #define PORT 3490
+#define PORT 12000
+
 //int inet_pton(int af, const char *src, void *dst);
-struct sockaddr_in sa;                                          // IPv4
-struct sockaddr_in6 sa6;                                        // IPv6
-inet_pton(AF_INET, "10.12.110.57", &(sa.sin_addr));             //IPv4
-inet_pton(AF_INET6, "2001:db8:63b3:1::3490", &(sa6.sin6_addr)); //IPv6
+struct sockaddr_in sa;   // IPv4
+struct sockaddr_in6 sa6; // IPv6
+//inet_pton(AF_INET, "10.12.110.57", &(sa.sin_addr));             //IPv4
+//inet_pton(AF_INET6, "2001:db8:63b3:1::3490", &(sa6.sin6_addr)); //IPv6
 
 struct addressinfo
 {
@@ -104,12 +107,11 @@ int recvfrom(int sockfd, void *buf, int len, unsigned int flags, struct sockaddr
 */
 
 char ip4[INET_ADDRSTRLEN]; // space to hold the IPV4 string
-struct sockaddr in sa;     // pretend this is loaded with someting
-inet_ntop(AF_INET, &(sa.sin_addr), ip4, INET_ADDRSTRLEN);
+//struct sockaddr in sa;     // pretend this is loaded with someting
+//inet_ntop(AF_INET, &(sa.sin_addr), ip4, INET_ADDRSTRLEN);
 
 int main()
 {
-    cout << "The Ipv4 address is: %s\n", ip4;
 
     return 0;
 }
