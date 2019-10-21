@@ -1,117 +1,35 @@
-#include<stdio.h>
+// adding headers 
+#include <stdio.h>
 #include <stdlib.h>
 //for socket and related functions
 #include <sys/types.h>
 #include <sys/socket.h>
-//for inncluding structures which will store information needed
-#include <unistd.h>
-#include <netdb.h>
+//for including structures which will store information needed
 #include <netinet/in.h>
+#include <unistd.h>
+#define SIZE 1000
 
-struct sockaddr_in sa;                                          // IPv4
-struct sockaddr_in6 sa6;                                        // IPv6
-// inet_pton(AF_INET, "10.12.110.57", &(sa.sin_addr));             //IPv4
-// inet_pton(AF_INET6, "2001:db8:63b3:1::3490", &(sa6.sin6_addr)); //IPv6
-
-#define PORT "3490" // the port client will be connecting
-#define MAXDATASIZE 100 // max nnumber of bytes we can get 
-
+//main functions
 int main()
 {
-    // creating the socket
-    int network_socket;
-    //calling socket function and storing the result in the variable
-    //socket(domainOfTheSocket,TypeOfTheSocket,FlagForProtocol{0 for default protocol i.e, TCP})
-    //AF_INET = constant defined in the header file for us
-    //TCP vs UDP --- SOCK_STREAM for TCP
-    // flag 0 for TCP (default protocol)
-    network_socket = socket(AF_INET,SOCK_STREAM,0);
-    //creating network connection
-    //in order to connect to the other side of the socket we need to declare connect
-    //with specifying address where we want to connect to
-    //already defined struct sockaddr_in
-    struct sockaddr_in server_address;
-    //what type of address we are woking with
-    server_address.sin_family = AF_INET;
-    //for taking the port number and htons converts the port # to the appropriate data type we want to write
-    //to specifying the port
-    //htons : conversion functions
+  int socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
+// server address
+  struct sockaddr_in serverAddress;
+  serverAddress.sin_family = AF_INET;
+  serverAddress.sin_port = htons(9002);
+  serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-    server_address.sin_port = htons(9002);
-    //structure within structure A.B.c
-    server_address.sin_addr.s_addr = INADDR_ANY; //INADDR_ANY is for connection with 0000
-    //connect returns us a response that connection is establlised or not
-    int connect_status = connect(network_socket,(struct sockaddr *) &server_address, sizeof(server_address));
-    //check for the error with the connection
+// communicates with listen
+  connect(socketDescriptor, (struct sockaddr *)&serverAddress, sizeof(serverAddress));
 
-    if (connect_status == -1){
-    printf("There was an error making a connection to socket\n" );
-    }
+  char serverResponse[SIZE];
+  recv(socketDescriptor, &serverResponse, sizeof(serverResponse), 0);
+  printf("Ther server sent the data : %s", serverResponse);
 
-    //recieve data from the server
-    char server_response[256];
-
-    //recieve the data from the server
-    recv(network_socket,&server_response,sizeof(server_response),0);
-
-    //recieved data from the server successfully then printing the data obtained from the server
-
-    printf("Ther server sent the data : %s",server_response);
-
-    //closing the socket
-    close(network_socket);
-    return 0;
-    // int sockfd;
-    // struct addrinfo hints, *servinfo, *p;
-    // int rv;
-    // int numbytes;
-    // struct sockaddr_storage their_addr;
-    // char buf[MAXBUFLEN];
-    // socklen_t addr_len;
-    // char s[INET6_ADDRSTRLEN];
-    // memset(&hints, 0, sizeof hints);
-    // hints.ai_family = AF_UNSPEC; // set to AF_INET to force IPv4
-    // hints.ai_socktype = SOCK_DGRAM;
-    // hints.ai_flags = AI_PASSIVE; // use my IP
-    // if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
-    // fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-    // return 1;
-    // }
-    // // loop through all the results and bind to the first we can
-    // for(p = servinfo; p != NULL; p = p->ai_next) {
-    //     if ((sockfd = socket(p->ai_family, p->ai_socktype,
-    //         p->ai_protocol)) == -1) {
-    //     perror("listener: socket");
-    //     continue;
-    //     }
-    //     if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
-    //         close(sockfd);
-    //         perror("listener: bind");
-    //         continue;
-    //     }
-    //     break;
-    // }
-    // if (p == NULL) {
-    //     fprintf(stderr, "listener: failed to bind socket\n");
-    //     return 2;
-    // }
-    // freeaddrinfo(servinfo);
-    // printf("listener: waiting to recvfrom...\n");
-
-    // addr_len = sizeof their_addr;
-    // if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,(struct sockaddr *)&their_addr, &addr_len)) == -1) {perror("recvfrom");
-    // exit(1);
-    // }
-    // printf("listener: got packet from %s\n",
-    //     inet_ntop(their_addr.ss_family,
-    //         get_in_addr((struct sockaddr *)&their_addr),s, sizeof s));
-    // printf("listener: packet is %d bytes long\n", numbytes);
-    // buf[numbytes] = '\0';
-    // printf("listener: packet contains \"%s\"\n", buf);
-    // close(sockfd);
-    // return 0;
+  //closing the socket
+  close(socketDescriptor);
+  return 0;
 }
-
 // #include <sys/socket.h>
 // #include <sys/types.h>
 // #include <netinet/in.h>
